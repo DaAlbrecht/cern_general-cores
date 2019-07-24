@@ -338,7 +338,7 @@ begin
     end if;
 end PROCESS p_encoding;
 
-disp_FSM_next: process(s_RunDisp, s_ctrl_reg, s_dP6bit, s_dP4bit, s_in_8b_reg)
+disp_FSM_next: process(s_RunDisp, s_in_8b_reg, s_ctrl_reg, s_dP6bit, s_dP4bit, s_in_8b_reg)
 begin
   s_RunDisp_comb <= s_RunDisp;
   
@@ -351,6 +351,10 @@ begin
       s_RunDisp_comb <= c_RD_MINUS;
     end if;
   end if;                                           
+
+  if ( s_in_8b_reg(1 downto 0) /= "00" and s_ctrl_reg = '1') then
+      s_RunDisp_comb <= s_RunDisp;
+  end if;
 end process;
 
 disp_fsm_seq: process(clk_i, rst_n_i)
@@ -368,7 +372,8 @@ begin
      end if;
 end process;     
 
-
+s_ctrl_reg <= ctrl_i;
+s_in_8b_reg <= in_8b_i;
 
 inout_buffers: process(clk_i, rst_n_i)
 begin
@@ -378,13 +383,12 @@ begin
        --====================================================================== 
        --! reset encoder
        if(rst_n_i = '0') then
-            s_ctrl_reg <= '0';
-            s_in_8b_reg <= B"000_00000";
+            -- s_ctrl_reg <= '0';
+            -- s_in_8b_reg <= B"000_00000";
             s_err_reg <= '0';
             s_out_10b_reg <= B"0000_000000";
        else
-            s_ctrl_reg <= ctrl_i;
-            s_in_8b_reg <= in_8b_i;
+        
             s_err_reg <= s_err;
             s_out_10b_reg <= s_out_10b;
        end if;
@@ -392,6 +396,5 @@ begin
      
 end process;     
 
-dispar_o <= s_RunDisp_comb;
 
 end rtl;
