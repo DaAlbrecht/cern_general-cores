@@ -31,6 +31,7 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 use work.genram_pkg.all;
 use work.wishbone_pkg.all;
@@ -42,7 +43,8 @@ entity wb_simple_uart is
     g_with_physical_uart  : boolean;
     g_interface_mode      : t_wishbone_interface_mode      := CLASSIC;
     g_address_granularity : t_wishbone_address_granularity := WORD;
-    g_vuart_fifo_size     : integer := 1024
+    g_vuart_fifo_size     : integer := 1024;
+    g_preset_bcr          : integer := 0
     );
   port (
 
@@ -209,7 +211,7 @@ begin  -- syn
     begin
       if rising_edge(clk_sys_i) then
         if rst_n_i = '0' then
-          uart_bcr <= (others => '0');
+          uart_bcr <= std_logic_vector(to_unsigned(g_preset_bcr, uart_bcr'length));
         elsif(regs_out.bcr_wr_o = '1')then
           uart_bcr <= regs_out.bcr_o;
         end if;

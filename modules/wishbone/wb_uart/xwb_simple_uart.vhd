@@ -41,7 +41,8 @@ entity xwb_simple_uart is
     g_with_physical_uart  : boolean := true;
     g_interface_mode      : t_wishbone_interface_mode      := CLASSIC;
     g_address_granularity : t_wishbone_address_granularity := WORD;
-    g_vuart_fifo_size     : integer := 1024
+    g_vuart_fifo_size     : integer := 1024;
+    g_preset_bcr     : integer := 0
     );
 
   port(
@@ -69,7 +70,8 @@ architecture rtl of xwb_simple_uart is
       g_with_physical_uart  : boolean;
       g_interface_mode      : t_wishbone_interface_mode;
       g_address_granularity : t_wishbone_address_granularity;
-      g_vuart_fifo_size     : integer);
+      g_vuart_fifo_size     : integer;
+      g_preset_bcr          : integer);
     port (
       clk_sys_i  : in  std_logic;
       rst_n_i    : in  std_logic;
@@ -95,7 +97,8 @@ begin  -- rtl
       g_with_physical_uart  => g_with_physical_uart,
       g_interface_mode      => g_interface_mode,
       g_address_granularity => g_address_granularity,
-      g_vuart_fifo_size     => g_vuart_fifo_size)
+      g_vuart_fifo_size     => g_vuart_fifo_size,
+      g_preset_bcr          => g_preset_bcr)
     port map (
       clk_sys_i  => clk_sys_i,
       rst_n_i    => rst_n_i,
